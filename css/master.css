@@ -1,9 +1,15 @@
 /* Global initialization */
-:root {
+/*:root {
 	--bg: #fff;
 	--fg: #272822;
 	--links: #07a;
 	--visited: #941352;
+}*/
+:root {
+	--bg: #272822;
+	--fg: #e8e8e3;
+	--links: #66d9ef;
+	--visited: #ae81ff;
 }
 
 @media (prefers-color-scheme: dark) {
