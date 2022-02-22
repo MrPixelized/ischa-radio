@@ -23,7 +23,7 @@ class Playlist extends HTMLElement {
 
 		for (let track of this.tracks) {
 			let element = document.createElement("p");
-			element.innerHTML = track.full_title;
+			element.innerHTML = track.index + ". " + track.full_title;
 
 			if (this.current == track) {
 				element.style.color = 'var(--visited)';
