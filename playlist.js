@@ -58,7 +58,7 @@ class Playlist extends HTMLElement {
 	async update_tracks() {
 		let tracks = await fetch('https://radio.ischa.dev/status/playlist');
 		tracks = await tracks.text();
-		tracks = tracks.split('\n');
+		tracks = tracks.trim().split('\n');
 		
 		this.tracks = [];
 
