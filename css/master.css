@@ -1,0 +1,74 @@
+/* Global initialization */
+:root {
+	--bg: #fff;
+	--fg: #272822;
+	--links: #07a;
+	--visited: #941352;
+}
+
+@media (prefers-color-scheme: dark) {
+	/* For dark mode, opt for a monokai color scheme */
+	:root {
+		--bg: #272822;
+		--fg: #e8e8e3;
+		--links: #66d9ef;
+		--visited: #ae81ff;
+	}
+
+}
+
+/* Overall page styling */
+html {
+	font-family: 'FiraCode', 'DejaVu Sans Mono', monospace;
+}
+
+body {
+	background-color: var(--bg);
+	color: var(--fg);
+	margin: 2em auto;
+	max-width: 80ch;
+	padding: 1em;
+	line-height: 1.4;
+	text-align: justify;
+}
+
+@media (max-width: 100ch) {
+	body {
+		text-align: left;
+	}
+}
+
+/* Regular text */
+p, pre {
+	font-size: large;
+}
+
+a {
+	color: var(--links);
+}
+
+a:visited {
+    color: var(--visited);
+}
+
+/* Headers */
+@media (min-width: 60ch) {
+	h1:before {
+		content: "ischa.dev - "
+	}
+}
+
+h2 a {
+	text-decoration: none;
+}
+
+h2:before {
+	/* Borrowed from https://mdosch.de/, who seems to have had a similar idea */
+	content: '¶';
+	opacity: 0.2;
+	position: relative;
+	width: 1.5em;
+	text-align: center;
+	display: inline-block;
+	margin-left: -1.5em;
+}
