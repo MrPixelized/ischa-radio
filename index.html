@@ -10,12 +10,13 @@
 	</head>
 	<body>
 		<h1>IschaRadio!</h1>
-		<h2>Music controls</h2>
-		<audio controls autoplay name="media" volume="0.2">
-			<source src="https://radio.ischa.dev/stream" type="audio/ogg">
-		</audio>
-
 		<h2>Track list</h2>
-		<live-playlist/>
+		<live-playlist></live-playlist>
+
+		<footer>
+			<audio controls autoplay preload="auto">
+				<source src="https://radio.ischa.dev/stream" type="audio/ogg">
+			</audio>
+		</footer>
 	</body>
 </html>

@@ -78,3 +78,25 @@ h2:before {
 	display: inline-block;
 	margin-left: -1.5em;
 }
+
+audio::-webkit-media-controls-panel {
+	background-color: var(--fg);
+}
+
+audio::-webkit-media-controls-play-button {
+	display: none;
+}
+
+footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: var(--fg);
+	color: var(--bg);
+	text-align: center;
+}
+
+footer audio {
+	width: 100%;
+}
