@@ -83,10 +83,6 @@ audio::-webkit-media-controls-panel {
 	background-color: var(--fg);
 }
 
-audio::-webkit-media-controls-play-button {
-	display: none;
-}
-
 footer {
 	position: fixed;
 	left: 0;
