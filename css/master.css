@@ -102,22 +102,20 @@ footer audio {
 	margin-bottom: -6px;
 }
 
-footer a {
+footer span {
 	position: absolute;
 	z-index: 10;
-	left: 0;
-	right: 0;
+	left: 10em;
+	right: 10em;
 	text-decoration: none;
 	transform: translateY(-50%);
 	top: 50%;
 }
 
-footer a span {
+footer span a {
 	padding-left: 1em;
 	padding-right: 1em;
 	background-color: var(--fg);
-}
-
-footer * {
-	color: var(--bg);
+	text-decoration: none;
+	color: var(--bg) !important;
 }
