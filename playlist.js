@@ -1,14 +1,23 @@
-const sleep = (milliseconds) => {
-  return new Promise(resolve => setTimeout(resolve, milliseconds))
+class Track {
+	constructor(str) {
+		this.index = str.split(':')[0];
+
+		let [_, ...title] = str.split(' ');
+		this.full_title =  title.join(' ');
+	}
+
+	get format() {
+		return this.index + '. ' + this.full_title;
+	}
 }
 
 class UpdateStreamer {
 	constructor() {
 		this.sse = new EventSource('https://radio.ischa.dev/status');
 		this.event_handlers = [];
-		this.sse.onmessage = (e) => {
+		this.sse.onmessage = async (e) => {
 			for (let handler of this.event_handlers) {
-				handler(e);
+				await handler(e);
 			}
 		}
 	}
@@ -18,41 +27,13 @@ class UpdateStreamer {
 	}
 }
 
-const streamer = new UpdateStreamer();
-
-class Playlist extends HTMLElement {
+class MpdData {
 	constructor() {
-		super();
-
-		this.shadow = this.attachShadow({mode: 'open'});
-
+		this.streamer = new UpdateStreamer();
 		this.tracks = [];
 		this.current = null;
 
-		this.update_tracks().then();
-		this.update_current().then();
-		this.render();
-
-		this.update();
-
-		this.streamer = streamer;
 		this.streamer.add_handler(this.update.bind(this));
-	}
-
-	render() {
-		this.shadow.innerHTML = '';
-
-		for (let track of this.tracks) {
-			let element = document.createElement('p');
-			element.innerHTML = track.index + '. ' + track.full_title;
-
-			if (this.current == track) {
-				element.style.color = 'var(--visited)';
-				element.scrollIntoView();
-			}
-
-			this.shadow.appendChild(element);
-		}
 	}
 
 	async update(e = null) {
@@ -66,8 +47,6 @@ class Playlist extends HTMLElement {
 
 			await this.update_current();
 		}
-
-		this.render();
 	}
 
 	async update_tracks() {
@@ -91,42 +70,64 @@ class Playlist extends HTMLElement {
 	}
 }
 
+const mpd_data = new MpdData();
+
+class Playlist extends HTMLElement {
+	constructor() {
+		super();
+
+		this.shadow = this; //.attachShadow({mode: 'open'});
+
+		this.data = mpd_data;
+		this.data.streamer.add_handler(this.render.bind(this))
+
+		this.render();
+	}
+
+	async render(_e) {
+		if (this.data.current === null) {
+			await this.data.update();
+		}
+
+		this.shadow.innerHTML = '';
+
+		for (let track of this.data.tracks) {
+			let element = document.createElement('p');
+			element.innerHTML = track.index + '. ' + track.full_title;
+
+			if (this.data.current == track) {
+				element.style.color = 'var(--visited)';
+				element.id = "playlist-current";
+				element.scrollIntoView({
+					block: 'end',
+					inline: 'end',
+					behavior: 'smooth',
+				});
+			}
+
+			this.shadow.appendChild(element);
+		}
+	}
+}
+
 class CurrentTrack extends HTMLElement {
 	constructor() {
 		super();
 
-		this.shadow = this.attachShadow({mode: 'open'});
-		this.track = null;
+		this.shadow = this; //.attachShadow({mode: 'open'});
 
-		this.update();
+		this.data = mpd_data;
+		this.data.streamer.add_handler(this.render.bind(this))
 
-		this.streamer = streamer;
-		this.streamer.add_handler(this.update.bind(this));
-	}
-
-	async update() {
-		let data = await fetch('https://radio.ischa.dev/status/current');
-		data = await data.text();
-
-		this.track = new Track(data);
 		this.render();
 	}
 
-	render() {
-		this.shadow.innerHTML = this.track.format;
-	}
-}
+	async render(_e) {
+		if (this.data.current === null) {
+			await this.data.update();
+		}
 
-class Track {
-	constructor(str) {
-		this.index = str.split(':')[0];
-
-		let [_, ...title] = str.split(' ');
-		this.full_title =  title.join(' ');
-	}
-
-	get format() {
-		return this.index + '. ' + this.full_title;
+		this.shadow.innerHTML = this.data.current.format;
 	}
 }
 
