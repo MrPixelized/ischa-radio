@@ -30,7 +30,7 @@ class UpdateStreamer {
 class MpdData {
 	constructor() {
 		this.streamer = new UpdateStreamer();
-		this.tracks = [];
+		this.tracks = null;
 		this.current = null;
 
 		this.streamer.add_handler(this.update.bind(this));
@@ -39,14 +39,13 @@ class MpdData {
 	async update(e = null) {
 		if (e === null) {
 			await this.update_tracks();
-			await this.update_current();
 		} else {
 			if (e.data == 'playlist') {
 				await this.update_tracks();
 			}
-
-			await this.update_current();
 		}
+
+		await this.update_current();
 	}
 
 	async update_tracks() {
@@ -85,7 +84,7 @@ class Playlist extends HTMLElement {
 	}
 
 	async render(_e) {
-		if (this.data.current === null) {
+		if (!this.data.current) {
 			await this.data.update();
 		}
 
@@ -95,7 +94,7 @@ class Playlist extends HTMLElement {
 			let element = document.createElement('p');
 			element.innerHTML = track.index + '. ' + track.full_title;
 
-			if (this.data.current == track) {
+			if (this.data.current== track) {
 				element.style.color = 'var(--visited)';
 				element.id = "playlist-current";
 				element.scrollIntoView({
@@ -123,7 +122,7 @@ class CurrentTrack extends HTMLElement {
 	}
 
 	async render(_e) {
-		if (this.data.current === null) {
+		if (!this.data.current) {
 			await this.data.update();
 		}
 
