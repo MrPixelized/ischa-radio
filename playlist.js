@@ -37,12 +37,8 @@ class MpdData {
 	}
 
 	async update(e = null) {
-		if (e === null) {
+		if (e === null || e.data == 'playlist') {
 			await this.update_tracks();
-		} else {
-			if (e.data == 'playlist') {
-				await this.update_tracks();
-			}
 		}
 
 		await this.update_current();
@@ -94,18 +90,20 @@ class Playlist extends HTMLElement {
 			let element = document.createElement('p');
 			element.innerHTML = track.index + '. ' + track.full_title;
 
-			if (this.data.current== track) {
-				element.style.color = 'var(--visited)';
-				element.id = "playlist-current";
-				element.scrollIntoView({
-					block: 'end',
-					inline: 'end',
-					behavior: 'smooth',
-				});
+			if (track == this.data.current) {
+				var current = element;
 			}
 
 			this.shadow.appendChild(element);
 		}
+
+		current.style.color = 'var(--visited)';
+		current.id = "playlist-current";
+		current.scrollIntoView({
+			block: 'center',
+			inline: 'nearest',
+			behavior: 'smooth',
+		});
 	}
 }
 
