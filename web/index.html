@@ -10,16 +10,17 @@
 		<title>IschaRadio</title>
 	</head>
 	<body>
-		<live-playlist></live-playlist>
+		<live-playlist id="playlist"></live-playlist>
 
 		<footer>
 			<span>
-				<a href="#playlist-current">
+				<a href="javascript:document.getElementById('playlist')
+					     .scroll_to_current()">
 					<current-track></current-track>
 				</a>
 			</span>
 
-			<audio controls autoplay preload="auto">
+			<audio controls autoplay preload="none">
 				<source src="https://radio.ischa.dev/stream" type="audio/ogg">
 			</audio>
 		</footer>

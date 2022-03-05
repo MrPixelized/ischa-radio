@@ -79,31 +79,37 @@ class Playlist extends HTMLElement {
 		this.render();
 	}
 
-	async render(_e) {
-		if (!this.data.current) {
-			await this.data.update();
-		}
-
-		this.shadow.innerHTML = '';
-
-		for (let track of this.data.tracks) {
-			let element = document.createElement('p');
-			element.innerHTML = track.index + '. ' + track.full_title;
-
-			if (track == this.data.current) {
-				var current = element;
-			}
-
-			this.shadow.appendChild(element);
-		}
-
+	highlight_current() {
+		let current = this.shadow.children[this.data.current.index - 1];
 		current.style.color = 'var(--visited)';
 		current.id = "playlist-current";
+	}
+
+	scroll_to_current() {
+		let current = this.shadow.children[this.data.current.index - 1];
 		current.scrollIntoView({
 			block: 'center',
 			inline: 'nearest',
 			behavior: 'smooth',
 		});
+	}
+
+	async render(_e) {
+		if (!this.data.current) {
+			await this.data.update();
+		}
+
+		let elements = this.data.tracks.map(function (track) {
+			let element = document.createElement('p');
+			element.innerHTML = track.index + '. ' + track.full_title;
+
+			return element;
+		});
+
+		this.shadow.replaceChildren(...elements);
+
+		this.highlight_current();
+		this.scroll_to_current();
 	}
 }
 
