@@ -6,17 +6,15 @@ delim="___"
 # format of shown tracks
 mpcfmt="%position%:%id%. %artist% - %title%"
 
-host='password@localhost'
-
 # make sure child processes are killed when this one is
 trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
 
 # outputs an SSE stream containing changed elements of the music
 # server (playlist, player, etc.), delimited by $delim
 function mpc-statusloop() {
-	mpc --host "$host"
+	mpc
 
-	mpc --host "$host" idleloop | while read change; do
+	mpc idleloop | while read change; do
 		printf "event: update_to\n\n"
 		printf "data: $change\n\n"
 		printf "\n\n"
@@ -27,12 +25,12 @@ function mpc-statusloop() {
 # whenever the current track changes, outputs the current track,
 # new tracks are delimited by $delim
 function current-update() {
-	mpc --host "$host" current -f "$mpcfmt"
+	mpc current -f "$mpcfmt"
 	echo "$delim"
 
-	mpc --host "$host" idleloop | while read change; do
+	mpc idleloop | while read change; do
 		if [ $change == "player" ]; then
-			mpc --host "$host" current -f "$mpcfmt"
+			mpc current -f "$mpcfmt"
 			echo "$delim"
 		fi
 	done
@@ -41,12 +39,12 @@ function current-update() {
 # whenever the playist changes, outputs the playlist,
 # new playlists are delimited by $delim
 function playlist-update() {
-	mpc --host "$host" playlist -f "$mpcfmt"
+	mpc playlist -f "$mpcfmt"
 	echo "$delim"
 
-	mpc --host "$host" idleloop | while read change; do
+	mpc idleloop | while read change; do
 		if [ $change == "playlist" ]; then
-			mpc --host "$host" playlist -f "$mpcfmt"
+			mpc playlist -f "$mpcfmt"
 			echo "$delim"
 		fi
 	done
