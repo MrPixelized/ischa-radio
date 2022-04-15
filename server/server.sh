@@ -50,6 +50,13 @@ function playlist-update() {
 	done
 }
 
+# restream the HTTP output of the MPD server to DSH
+function restream-mpd() {
+	ffmpeg -i "http://localhost:8000/mpd.ogg" \
+		   -c:v libx264 -c:a aac \
+		   -f flv "rtmp://localhost/ischaradio/stream"
+}
+
 # TODO: use UNIX domain sockets instead, in the location the web API
 # would expect to find them
 
@@ -58,5 +65,6 @@ function playlist-update() {
 mpc-statusloop  | ssimoe 127.0.0.1:6601 -d "$delim" &
 current-update  | ssimoe 127.0.0.1:6602 -d "$delim" -m 1 -b 1 &
 playlist-update | ssimoe 127.0.0.1:6603 -d "$delim" -m 1 -b 1 &
+restream-mpd &
 
 wait
