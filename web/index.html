@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="Ischa Radio">
 		<link rel="stylesheet" href="./css/master.css">
-		<script src="https://cdn.dashjs.org/latest/dash.all.min.js">
+		<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 		<script src="playlist.js"></script>
 		<script src="setdefaultvolume.js" defer></script>
 		<title>IschaRadio</title>
@@ -22,8 +22,13 @@
 			</span>
 
 			<audio data-dashjs-player controls autoplay
-				   src="https://radio.ischa.dev/dash/stream.mpd" preload="none">
+				   src="https://radio.ischa.dev/dash/stream.mpd">
 			</audio>
+			<script>
+				var url = "https://radio.ischa.dev/dash/stream.mpd"
+				var player = dashjs.MediaPlayer().create()
+				player.initialize(document.querySelector("audio"), url, true)
+			</script>
 		</footer>
 	</body>
 </html>
